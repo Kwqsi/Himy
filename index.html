@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Himy, will you be my girlfriend?</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Outfit:wght@300;500&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(125deg, #2a1518 0%, #4a2530 25%, #3d2028 50%, #4a2530 75%, #2a1518 100%);
+      background-size: 400% 400%;
+      animation: gradient-shift 12s ease infinite;
+      font-family: 'Outfit', sans-serif;
+      color: #fce4ec;
+      padding: 1.5rem;
+      overflow-x: hidden;
+      padding-top: 140px;
+      padding-bottom: 140px;
+    }
+
+    @keyframes gradient-shift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Top and bottom photo strips */
+    .photo-strip {
+      position: fixed;
+      left: 0;
+      right: 0;
+      height: 120px;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .photo-strip-top {
+      top: 0;
+    }
+
+    .photo-strip-bottom {
+      bottom: 0;
+    }
+
+    .photo-strip-track {
+      display: flex;
+      height: 100%;
+      width: max-content;
+      animation: scroll-left 35s linear infinite;
+    }
+
+    .photo-strip-bottom .photo-strip-track {
+      animation: scroll-right 35s linear infinite;
+    }
+
+    @keyframes scroll-left {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    @keyframes scroll-right {
+      0% { transform: translateX(-50%); }
+      100% { transform: translateX(0); }
+    }
+
+    .photo-strip img {
+      height: 100%;
+      width: auto;
+      min-width: 160px;
+      max-width: 200px;
+      object-fit: cover;
+      flex-shrink: 0;
+      display: block;
+      background: rgba(240, 98, 146, 0.2);
+    }
+
+    .card {
+      position: relative;
+      z-index: 1;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+      padding: 3rem 2rem;
+      background: rgba(255, 240, 245, 0.06);
+      border: 1px solid rgba(255, 182, 193, 0.35);
+      border-radius: 24px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+    }
+
+    .heart {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: #f06292;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      50% { transform: scale(1.4); opacity: 0.9; }
+    }
+
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      font-size: clamp(1.75rem, 5vw, 2.25rem);
+      line-height: 1.3;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.02em;
+    }
+
+    .sub {
+      font-weight: 300;
+      font-size: 1rem;
+      opacity: 0.85;
+      margin-bottom: 2rem;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      padding: 0.85rem 2rem;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-yes {
+      background: linear-gradient(135deg, #f06292, #ec407a);
+      color: white;
+      box-shadow: 0 4px 20px rgba(240, 98, 146, 0.5);
+    }
+
+    .btn-yes:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 28px rgba(240, 98, 146, 0.6);
+    }
+
+    .btn-no {
+      background: rgba(255, 240, 245, 0.12);
+      color: #fce4ec;
+      border: 1px solid rgba(255, 182, 193, 0.45);
+    }
+
+    .btn-no:hover {
+      transform: scale(1.02);
+    }
+
+    .btn-no.runaway {
+      position: relative;
+      transition: left 0.3s, top 0.3s;
+    }
+
+    /* Heart explosion overlay */
+    .heart-explosion-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      pointer-events: auto;
+      transition: opacity 1.2s ease-in-out;
+      overflow: hidden;
+    }
+
+    .heart-explosion-overlay.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .card .success-content {
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+
+    .card .success-content.visible {
+      opacity: 1;
+    }
+
+    .success-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .notecard-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .notecard-stack {
+      position: relative;
+      width: 100%;
+      max-width: 200px;
+      margin: 0 auto;
+      height: 72px;
+      cursor: pointer;
+    }
+
+    .notecard-stack.on-last-card {
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .notecard-stack-label {
+      font-size: 0.8rem;
+      opacity: 0.7;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+
+    .notecard {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0.6rem 0.75rem;
+      background: rgba(75, 35, 55, 0.98);
+      border: 1px solid rgba(255, 182, 193, 0.5);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+      transition: transform 0.4s ease, opacity 0.4s ease;
+      z-index: 0;
+    }
+
+    .notecard.current {
+      z-index: 1;
+    }
+
+    .notecard:not(.current):not(.flipped) {
+      visibility: hidden;
+    }
+
+    .notecard.flipped {
+      transform: translateY(-80%) rotate(-8deg);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .notecard .notecard-reason {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #fce4ec;
+      text-align: center;
+    }
+
+    .live-timer {
+      font-size: 0.85rem;
+      opacity: 0.6;
+      margin-bottom: 0.5rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .strip-callout {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      font-size: 0.9rem;
+      font-style: italic;
+      color: rgba(252, 228, 236, 0.9);
+      text-align: center;
+      padding: 0.35rem 0.75rem;
+      max-width: 90%;
+      transition: opacity 0.5s ease;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .strip-callout .callout-arrow {
+      font-size: 1.25rem;
+      line-height: 1;
+      font-style: normal;
+    }
+
+    .strip-callout.top {
+      top: 124px;
+    }
+
+    .strip-callout.top .callout-arrow {
+      order: -1;
+    }
+
+    .strip-callout.bottom {
+      bottom: 124px;
+    }
+
+    .strip-callout.bottom .callout-arrow {
+      order: 1;
+    }
+
+    .strip-callout.hidden {
+      opacity: 0;
+    }
+
+    .heart-particle {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      font-size: 1.25rem;
+      color: #f06292;
+      transform: translate(-50%, -50%) scale(0);
+      animation: heart-explode 1s ease-out forwards;
+      pointer-events: none;
+    }
+
+    @keyframes heart-explode {
+      0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(var(--scale, 1));
+        opacity: 0.5;
+      }
+    }
+
+    /* Big expanding heart (after explosion) */
+    .heart-expand-overlay {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 101;
+      pointer-events: auto;
+      transition: opacity 0.5s ease-out;
+    }
+
+    .heart-expand-overlay.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .heart-expand {
+      font-size: 3rem;
+      color: #f06292;
+      transform: scale(0);
+      animation: heart-expand 2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    @keyframes heart-expand {
+      to {
+        transform: scale(80);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Top strip: scrolls left -->
+  <div class="photo-strip photo-strip-top">
+    <div class="photo-strip-track">
+      <img src="images/photo1.jpg" alt="">
+      <img src="images/photo2.jpg" alt="">
+      <img src="images/photo3.jpg" alt="">
+      <img src="images/photo4.jpg" alt="">
+      <img src="images/photo5.jpg" alt="">
+      <img src="images/photo6.jpg" alt="">
+      <img src="images/photo7.jpg" alt="">
+      <img src="images/photo8.jpg" alt="">
+      <img src="images/photo9.jpg" alt="">
+      <img src="images/photo10.jpg" alt="">
+      <img src="images/photo11.jpg" alt="">
+      <img src="images/photo12.jpg" alt="">
+      <img src="images/photo13.jpg" alt="">
+      <img src="images/photo14.jpg" alt="">
+      <img src="images/photo15.jpg" alt="">
+      <img src="images/photo16.jpg" alt="">
+      <img src="images/photo17.jpg" alt="">
+      <img src="images/photo1.jpg" alt="">
+      <img src="images/photo2.jpg" alt="">
+      <img src="images/photo3.jpg" alt="">
+      <img src="images/photo4.jpg" alt="">
+      <img src="images/photo5.jpg" alt="">
+      <img src="images/photo6.jpg" alt="">
+      <img src="images/photo7.jpg" alt="">
+      <img src="images/photo8.jpg" alt="">
+      <img src="images/photo9.jpg" alt="">
+      <img src="images/photo10.jpg" alt="">
+      <img src="images/photo11.jpg" alt="">
+      <img src="images/photo12.jpg" alt="">
+      <img src="images/photo13.jpg" alt="">
+      <img src="images/photo14.jpg" alt="">
+      <img src="images/photo15.jpg" alt="">
+      <img src="images/photo16.jpg" alt="">
+      <img src="images/photo17.jpg" alt="">
+    </div>
+  </div>
+
+  <!-- Bottom strip: scrolls right -->
+  <div class="photo-strip photo-strip-bottom">
+    <div class="photo-strip-track">
+      <img src="images/photo1.jpg" alt="">
+      <img src="images/photo2.jpg" alt="">
+      <img src="images/photo3.jpg" alt="">
+      <img src="images/photo4.jpg" alt="">
+      <img src="images/photo5.jpg" alt="">
+      <img src="images/photo6.jpg" alt="">
+      <img src="images/photo7.jpg" alt="">
+      <img src="images/photo8.jpg" alt="">
+      <img src="images/photo9.jpg" alt="">
+      <img src="images/photo10.jpg" alt="">
+      <img src="images/photo11.jpg" alt="">
+      <img src="images/photo12.jpg" alt="">
+      <img src="images/photo13.jpg" alt="">
+      <img src="images/photo14.jpg" alt="">
+      <img src="images/photo15.jpg" alt="">
+      <img src="images/photo16.jpg" alt="">
+      <img src="images/photo17.jpg" alt="">
+      <img src="images/photo1.jpg" alt="">
+      <img src="images/photo2.jpg" alt="">
+      <img src="images/photo3.jpg" alt="">
+      <img src="images/photo4.jpg" alt="">
+      <img src="images/photo5.jpg" alt="">
+      <img src="images/photo6.jpg" alt="">
+      <img src="images/photo7.jpg" alt="">
+      <img src="images/photo8.jpg" alt="">
+      <img src="images/photo9.jpg" alt="">
+      <img src="images/photo10.jpg" alt="">
+      <img src="images/photo11.jpg" alt="">
+      <img src="images/photo12.jpg" alt="">
+      <img src="images/photo13.jpg" alt="">
+      <img src="images/photo14.jpg" alt="">
+      <img src="images/photo15.jpg" alt="">
+      <img src="images/photo16.jpg" alt="">
+      <img src="images/photo17.jpg" alt="">
+    </div>
+  </div>
+
+  <p class="strip-callout hidden" id="stripCallout" aria-live="polite"></p>
+
+  <div class="card" id="card">
+    <p class="live-timer" id="liveTimer">0.0s</p>
+    <div class="heart">♥</div>
+    <h1>Himy, will you be my girlfriend?</h1>
+    <p class="sub">Being with you is the easiest decision.</p>
+    <div class="buttons">
+      <button class="btn btn-yes" type="button">Yes!</button>
+      <button class="btn btn-no" type="button" id="btnNo">Hmm...</button>
+    </div>
+  </div>
+
+  <script>
+    const btnNo = document.getElementById('btnNo');
+    let moveCount = 0;
+
+    var startTime = Date.now();
+    var timerInterval = setInterval(function () {
+      var el = document.getElementById('liveTimer');
+      if (el) el.textContent = ((Date.now() - startTime) / 1000).toFixed(1) + 's';
+    }, 100);
+
+    var stripMessages = [
+      "Look how cute she is",
+      "She looks pretty cool",
+      "I wonder if she's funny",
+      "My favorite person",
+      "Look at that smile",
+      "My favorite gym rat",
+      "Second best chef",
+      "Bridgerton's #1 fan",
+      "Columbia's Finest",
+      "FINE SHYT",
+      "Future PHD",
+      "My future travel partner"
+    ];
+    var calloutEl = document.getElementById('stripCallout');
+    var calloutTimeout = null;
+    var calloutSchedule = null;
+    var shuffled = stripMessages.slice();
+    for (var i = shuffled.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = shuffled[i];
+      shuffled[i] = shuffled[j];
+      shuffled[j] = t;
+    }
+    var calloutIndex = 0;
+
+    function showStripCallout() {
+      if (!calloutEl) return;
+      var msg = shuffled[calloutIndex % shuffled.length];
+      calloutIndex++;
+      var isTop = Math.random() > 0.5;
+      var arrow = isTop ? '↑' : '↓';
+      calloutEl.innerHTML = '<span class="callout-arrow">' + arrow + '</span><span class="callout-text">' + msg + '</span>';
+      calloutEl.classList.remove('hidden');
+      calloutEl.classList.remove('top', 'bottom');
+      calloutEl.classList.add(isTop ? 'top' : 'bottom');
+      calloutEl.style.left = (15 + Math.random() * 70) + '%';
+      calloutEl.style.transform = 'translateX(-50%)';
+      if (calloutTimeout) clearTimeout(calloutTimeout);
+      calloutTimeout = setTimeout(function () {
+        calloutEl.classList.add('hidden');
+        calloutTimeout = null;
+        calloutSchedule = setTimeout(showStripCallout, 500);
+      }, 5000);
+    }
+    calloutSchedule = setTimeout(showStripCallout, 0);
+
+    btnNo.addEventListener('mouseenter', function () {
+      moveCount++;
+      const card = this.closest('.card');
+      const rect = card.getBoundingClientRect();
+      const maxX = window.innerWidth - rect.width - 40;
+      const maxY = window.innerHeight - 80;
+
+      const x = Math.random() * maxX * 0.6;
+      const y = Math.random() * maxY * 0.6;
+      this.style.transform = `translate(${Math.random() > 0.5 ? 1 : -1 * (80 + moveCount * 20)}px, ${Math.random() > 0.5 ? 1 : -1 * 40}px)`;
+    });
+
+    btnNo.addEventListener('click', function () {
+      this.style.transform = `translate(${Math.random() * 200 - 100}px, ${Math.random() * 200 - 100}px)`;
+    });
+
+    document.querySelector('.btn-yes').addEventListener('click', function () {
+      clearInterval(timerInterval);
+      if (calloutTimeout) clearTimeout(calloutTimeout);
+      if (calloutSchedule) clearTimeout(calloutSchedule);
+      calloutEl.classList.add('hidden');
+      var elapsedSeconds = (Date.now() - startTime) / 1000;
+
+      const overlay = document.createElement('div');
+      overlay.className = 'heart-explosion-overlay';
+      const count = 120;
+      for (let i = 0; i < count; i++) {
+        const angle = (Math.PI * 2 * i) / count + Math.random() * 0.5;
+        const dist = 120 + Math.random() * 280;
+        const dx = Math.cos(angle) * dist;
+        const dy = Math.sin(angle) * dist;
+        const heart = document.createElement('div');
+        heart.className = 'heart-particle';
+        heart.textContent = '♥';
+        heart.style.setProperty('--dx', dx + 'px');
+        heart.style.setProperty('--dy', dy + 'px');
+        heart.style.setProperty('--scale', 0.6 + Math.random() * 0.8);
+        heart.style.animationDuration = (0.6 + Math.random() * 0.6) + 's';
+        heart.style.animationDelay = (Math.random() * 0.15) + 's';
+        overlay.appendChild(heart);
+      }
+      document.body.appendChild(overlay);
+
+      setTimeout(function () {
+        overlay.classList.add('fade-out');
+        setTimeout(function () {
+          overlay.remove();
+          const expandOverlay = document.createElement('div');
+          expandOverlay.className = 'heart-expand-overlay';
+          expandOverlay.innerHTML = '<div class="heart-expand">♥</div>';
+          document.body.appendChild(expandOverlay);
+
+          expandOverlay.querySelector('.heart-expand').addEventListener('animationend', function () {
+            var reasonCards = ["your smile", "your curls", "your pinchable cheeks", "your eyes", "your selflessness", "your glow", "your eyebrows", "your skin", "your goals", "your kisses", "your intellect", "your laugh", "your hands", "your eyelashes", "your voice", "your smile lines", "your commitment to family", "your sleepy face", "how you carry yourself", "your music taste", "your shape", "your aspirations", "ASSSSSS", "your personality", "your drive", "your knowledge", "THEM LIPS", "your humor", "your genuineness", "your face", "your toes", "your pink bonnet", "your style", "your nose", "everything"];
+            var today = new Date();
+            var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            var dateStr = months[today.getMonth()] + ' ' + today.getDate() + ', ' + today.getFullYear();
+            var mainHtml = '<div class="success-content" id="successContent"><div class="heart">♥</div><h1>You said yes!</h1><p class="sub">You picked the right answer. You\'re officially my girlfriend! </p><p class="sub">' + dateStr + ' will forever be our day.</p><p class="sub">You took ' + elapsedSeconds.toFixed(1) + ' seconds to answer, which could\'ve been a little faster...</p></div>';
+            var cardsHtml = '';
+            for (var r = 0; r < reasonCards.length; r++) {
+              cardsHtml += '<div class="notecard' + (r === 0 ? ' current' : '') + '" data-index="' + r + '"><span class="notecard-reason">' + reasonCards[r] + '</span></div>';
+            }
+            var card = document.getElementById('card');
+            card.innerHTML = mainHtml;
+            var wrapper = document.createElement('div');
+            wrapper.className = 'success-wrapper';
+            var notecardArea = document.createElement('div');
+            notecardArea.className = 'notecard-area';
+            notecardArea.innerHTML = '<p class="notecard-stack-label">My favorite things</p><div class="notecard-stack" id="notecardStack">' + cardsHtml + '</div>';
+            card.parentNode.insertBefore(wrapper, card);
+            wrapper.appendChild(card);
+            wrapper.appendChild(notecardArea);
+            expandOverlay.classList.add('fade-out');
+            requestAnimationFrame(function () {
+              document.getElementById('successContent').classList.add('visible');
+            });
+            setTimeout(function () {
+              expandOverlay.remove();
+            }, 600);
+            document.getElementById('notecardStack').addEventListener('click', function () {
+              var current = this.querySelector('.notecard.current');
+              if (!current || this.classList.contains('on-last-card')) return;
+              var idx = parseInt(current.getAttribute('data-index'), 10);
+              var next = this.querySelector('.notecard[data-index="' + (idx + 1) + '"]');
+              if (!next) return;
+              current.classList.add('flipped');
+              current.classList.remove('current');
+              next.classList.add('current');
+              if (!this.querySelector('.notecard[data-index="' + (idx + 2) + '"]')) {
+                this.classList.add('on-last-card');
+              }
+            });
+          });
+        }, 500);
+      }, 500);
+    });
+  </script>
+</body>
+</html>
