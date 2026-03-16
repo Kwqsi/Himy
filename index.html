@@ -26,8 +26,8 @@
       color: #fce4ec;
       padding: 1.5rem;
       overflow-x: hidden;
-      padding-top: 140px;
-      padding-bottom: 140px;
+      padding-top: 110px;
+      padding-bottom: 110px;
     }
 
     @keyframes gradient-shift {
@@ -41,7 +41,7 @@
       position: fixed;
       left: 0;
       right: 0;
-      height: 120px;
+      height: 96px;
       overflow: hidden;
       z-index: 0;
     }
@@ -84,6 +84,75 @@
       flex-shrink: 0;
       display: block;
       background: rgba(240, 98, 146, 0.2);
+      cursor: pointer;
+    }
+
+    /* Lightbox */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(8px);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .lightbox.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .lightbox-backdrop {
+      position: absolute;
+      inset: 0;
+      cursor: pointer;
+    }
+
+    .lightbox-content {
+      position: relative;
+      z-index: 1;
+      max-width: 90vw;
+      max-height: 90vh;
+      border-radius: 12px;
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+    }
+
+    .lightbox-content img {
+      display: block;
+      max-width: 90vw;
+      max-height: 90vh;
+      width: auto;
+      height: auto;
+      border-radius: 12px;
+      object-fit: contain;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: -44px;
+      right: 0;
+      width: 36px;
+      height: 36px;
+      border: none;
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      font-size: 1.5rem;
+      line-height: 1;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s ease;
+    }
+
+    .lightbox-close:hover {
+      background: rgba(255, 255, 255, 0.25);
     }
 
     .card {
@@ -91,39 +160,51 @@
       z-index: 1;
       max-width: 420px;
       width: 100%;
+      margin: 0 auto;
       text-align: center;
       padding: 3rem 2rem;
-      background: rgba(255, 240, 245, 0.06);
-      border: 1px solid rgba(255, 182, 193, 0.35);
+      background: rgba(255, 240, 245, 0.08);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 182, 193, 0.25);
       border-radius: 24px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+        0 4px 24px rgba(0, 0, 0, 0.15),
+        0 25px 50px -12px rgba(0, 0, 0, 0.35),
+        0 40px 80px -20px rgba(0, 0, 0, 0.2);
     }
 
     .heart {
       font-size: 2.5rem;
       margin-bottom: 1rem;
       color: #f06292;
-      animation: pulse 1.5s ease-in-out infinite;
+      animation: pulse 2s ease-in-out infinite;
     }
 
     @keyframes pulse {
-      50% { transform: scale(1.4); opacity: 0.9; }
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.12); opacity: 0.95; }
     }
 
-    h1 {
+    .card h1 {
       font-family: 'Cormorant Garamond', serif;
       font-weight: 600;
-      font-size: clamp(1.75rem, 5vw, 2.25rem);
-      line-height: 1.3;
+      font-size: clamp(2rem, 5.5vw, 2.5rem);
+      line-height: 1.25;
       margin-bottom: 0.5rem;
       letter-spacing: 0.02em;
+      color: #fce4ec;
     }
 
-    .sub {
+    .card .sub {
+      font-family: 'Outfit', sans-serif;
       font-weight: 300;
       font-size: 1rem;
-      opacity: 0.85;
+      letter-spacing: 0.01em;
+      opacity: 0.9;
       margin-bottom: 2rem;
+      color: rgba(252, 228, 236, 0.95);
     }
 
     .buttons {
@@ -141,28 +222,44 @@
       border: none;
       border-radius: 999px;
       cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, border-color 0.25s ease;
     }
 
     .btn-yes {
+      position: relative;
       background: linear-gradient(135deg, #f06292, #ec407a);
       color: white;
-      box-shadow: 0 4px 20px rgba(240, 98, 146, 0.5);
+      box-shadow:
+        0 0 32px rgba(240, 98, 146, 0.4),
+        0 4px 20px rgba(240, 98, 146, 0.5);
     }
 
     .btn-yes:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 28px rgba(240, 98, 146, 0.6);
+      transform: scale(1.06);
+      box-shadow:
+        0 0 40px rgba(240, 98, 146, 0.5),
+        0 8px 32px rgba(240, 98, 146, 0.55);
+    }
+
+    .btn-yes:active {
+      transform: scale(1.02);
     }
 
     .btn-no {
-      background: rgba(255, 240, 245, 0.12);
+      background: rgba(255, 240, 245, 0.1);
       color: #fce4ec;
-      border: 1px solid rgba(255, 182, 193, 0.45);
+      border: 1px solid rgba(255, 182, 193, 0.4);
     }
 
     .btn-no:hover {
-      transform: scale(1.02);
+      transform: scale(1.04);
+      background: rgba(255, 240, 245, 0.16);
+      border-color: rgba(255, 182, 193, 0.55);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn-no:active {
+      transform: scale(1);
     }
 
     .btn-no.runaway {
@@ -216,11 +313,41 @@
       margin: 0 auto;
       height: 72px;
       cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
     .notecard-stack.on-last-card {
       cursor: default;
       pointer-events: none;
+    }
+
+    .favorite-photo-overlay {
+      position: fixed;
+      left: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 2;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      pointer-events: none;
+    }
+
+    .favorite-photo-overlay.visible {
+      opacity: 1;
+    }
+
+    .favorite-photo-overlay img {
+      width: 260px;
+      height: 360px;
+      object-fit: cover;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    .favorite-photo-overlay-right {
+      left: auto;
+      right: 24px;
     }
 
     .notecard-stack-label {
@@ -269,6 +396,8 @@
       font-weight: 600;
       color: #fce4ec;
       text-align: center;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
     .live-timer {
@@ -281,46 +410,55 @@
     .strip-callout {
       position: fixed;
       left: 50%;
-      transform: translateX(-50%);
+      transform: translate(-50%, 6px);
       z-index: 2;
       font-size: 0.9rem;
+      font-family: 'Cormorant Garamond', serif;
       font-style: italic;
-      color: rgba(252, 228, 236, 0.9);
+      color: rgba(252, 228, 236, 0.85);
       text-align: center;
-      padding: 0.35rem 0.75rem;
+      padding: 0.35rem 0.9rem;
       max-width: 90%;
-      transition: opacity 0.5s ease;
+      border-radius: 999px;
+      background: rgba(24, 8, 14, 0.55);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      opacity: 0;
       pointer-events: none;
-      display: flex;
-      flex-direction: column;
+      display: inline-flex;
       align-items: center;
-      gap: 0.25rem;
-    }
-
-    .strip-callout .callout-arrow {
-      font-size: 1.25rem;
-      line-height: 1;
-      font-style: normal;
+      gap: 0.4rem;
+      transition: opacity 0.6s ease, transform 0.6s ease;
     }
 
     .strip-callout.top {
-      top: 124px;
-    }
-
-    .strip-callout.top .callout-arrow {
-      order: -1;
+      top: 106px;
     }
 
     .strip-callout.bottom {
-      bottom: 124px;
+      bottom: 106px;
     }
 
-    .strip-callout.bottom .callout-arrow {
-      order: 1;
+    .strip-callout .callout-arrow {
+      font-size: 1.1rem;
+      line-height: 1;
+      font-style: normal;
+      opacity: 0.9;
     }
 
     .strip-callout.hidden {
       opacity: 0;
+      transform: translate(-50%, 10px);
+    }
+
+    .strip-callout:not(.hidden) {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    .strip-callout:hover .callout-arrow {
+      animation: arrow-bounce 1s ease-in-out infinite;
     }
 
     .heart-particle {
@@ -343,6 +481,11 @@
         transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(var(--scale, 1));
         opacity: 0.5;
       }
+    }
+
+    @keyframes arrow-bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
     }
 
     /* Big expanding heart (after explosion) */
@@ -397,6 +540,9 @@
       <img src="images/photo15.jpg" alt="">
       <img src="images/photo16.jpg" alt="">
       <img src="images/photo17.jpg" alt="">
+      <img src="images/photo18.jpg" alt="">
+      <img src="images/photo19.jpg" alt="">
+      <img src="images/photo20.jpg" alt="">
       <img src="images/photo1.jpg" alt="">
       <img src="images/photo2.jpg" alt="">
       <img src="images/photo3.jpg" alt="">
@@ -414,6 +560,9 @@
       <img src="images/photo15.jpg" alt="">
       <img src="images/photo16.jpg" alt="">
       <img src="images/photo17.jpg" alt="">
+      <img src="images/photo18.jpg" alt="">
+      <img src="images/photo19.jpg" alt="">
+      <img src="images/photo20.jpg" alt="">
     </div>
   </div>
 
@@ -437,6 +586,9 @@
       <img src="images/photo15.jpg" alt="">
       <img src="images/photo16.jpg" alt="">
       <img src="images/photo17.jpg" alt="">
+      <img src="images/photo18.jpg" alt="">
+      <img src="images/photo19.jpg" alt="">
+      <img src="images/photo20.jpg" alt="">
       <img src="images/photo1.jpg" alt="">
       <img src="images/photo2.jpg" alt="">
       <img src="images/photo3.jpg" alt="">
@@ -454,10 +606,22 @@
       <img src="images/photo15.jpg" alt="">
       <img src="images/photo16.jpg" alt="">
       <img src="images/photo17.jpg" alt="">
+      <img src="images/photo18.jpg" alt="">
+      <img src="images/photo19.jpg" alt="">
+      <img src="images/photo20.jpg" alt="">
     </div>
   </div>
 
   <p class="strip-callout hidden" id="stripCallout" aria-live="polite"></p>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <div class="lightbox-backdrop" id="lightboxBackdrop"></div>
+    <div class="lightbox-content">
+      <button type="button" class="lightbox-close" id="lightboxClose" aria-label="Close">×</button>
+      <img src="" alt="" id="lightboxImg">
+    </div>
+  </div>
 
   <div class="card" id="card">
     <p class="live-timer" id="liveTimer">0.0s</p>
@@ -473,6 +637,35 @@
   <script>
     const btnNo = document.getElementById('btnNo');
     let moveCount = 0;
+
+    (function initLightbox() {
+      var lightbox = document.getElementById('lightbox');
+      var lightboxImg = document.getElementById('lightboxImg');
+      var lightboxBackdrop = document.getElementById('lightboxBackdrop');
+      var lightboxClose = document.getElementById('lightboxClose');
+      function openLightbox(src) {
+        if (!lightbox || !lightboxImg) return;
+        lightboxImg.src = src;
+        lightbox.classList.add('visible');
+        lightbox.setAttribute('aria-hidden', 'false');
+      }
+      function closeLightbox() {
+        if (!lightbox) return;
+        lightbox.classList.remove('visible');
+        lightbox.setAttribute('aria-hidden', 'true');
+      }
+      document.body.addEventListener('click', function (e) {
+        if (e.target.closest('.photo-strip img')) {
+          e.preventDefault();
+          openLightbox(e.target.src);
+        }
+      });
+      if (lightboxBackdrop) lightboxBackdrop.addEventListener('click', closeLightbox);
+      if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && lightbox && lightbox.classList.contains('visible')) closeLightbox();
+      });
+    })();
 
     var startTime = Date.now();
     var timerInterval = setInterval(function () {
@@ -513,11 +706,12 @@
       var isTop = Math.random() > 0.5;
       var arrow = isTop ? '↑' : '↓';
       calloutEl.innerHTML = '<span class="callout-arrow">' + arrow + '</span><span class="callout-text">' + msg + '</span>';
+      // Randomize horizontal position so it feels playful
+      var leftPercent = 20 + Math.random() * 60; // 20%–80%
+      calloutEl.style.left = leftPercent + '%';
       calloutEl.classList.remove('hidden');
       calloutEl.classList.remove('top', 'bottom');
       calloutEl.classList.add(isTop ? 'top' : 'bottom');
-      calloutEl.style.left = (15 + Math.random() * 70) + '%';
-      calloutEl.style.transform = 'translateX(-50%)';
       if (calloutTimeout) clearTimeout(calloutTimeout);
       calloutTimeout = setTimeout(function () {
         calloutEl.classList.add('hidden');
@@ -580,7 +774,7 @@
           document.body.appendChild(expandOverlay);
 
           expandOverlay.querySelector('.heart-expand').addEventListener('animationend', function () {
-            var reasonCards = ["your smile", "your curls", "your pinchable cheeks", "your eyes", "your selflessness", "your glow", "your eyebrows", "your skin", "your goals", "your kisses", "your intellect", "your laugh", "your hands", "your eyelashes", "your voice", "your smile lines", "your commitment to family", "your sleepy face", "how you carry yourself", "your music taste", "your shape", "your aspirations", "ASSSSSS", "your personality", "your drive", "your knowledge", "THEM LIPS", "your humor", "your genuineness", "your face", "your toes", "your pink bonnet", "your style", "your nose", "everything"];
+            var reasonCards = ["your smile", "your curls", "your pinchable cheeks", "your eyes", "your selflessness", "your glow", "your eyebrows", "your skin", "your goals", "your kisses", "your intellect", "your laugh", "your hands", "your eyelashes", "your voice", "this picture", "this one too", "your smile lines", "your commitment to family", "your sleepy face", "how you carry yourself", "your music taste", "your shape", "your aspirations", "ASSSSSS", "your personality", "your drive", "your knowledge", "THEM LIPS", "your humor", "your genuineness", "your face", "your toes", "your pink bonnet", "your style", "your nose", "everything"];
             var today = new Date();
             var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
             var dateStr = months[today.getMonth()] + ' ' + today.getDate() + ', ' + today.getFullYear();
@@ -599,6 +793,16 @@
             card.parentNode.insertBefore(wrapper, card);
             wrapper.appendChild(card);
             wrapper.appendChild(notecardArea);
+            var favoritePhotoEl = document.createElement('div');
+            favoritePhotoEl.id = 'favoritePhotoOverlay';
+            favoritePhotoEl.className = 'favorite-photo-overlay';
+            favoritePhotoEl.innerHTML = '<img src="images/photo20.jpg" alt="">';
+            document.body.appendChild(favoritePhotoEl);
+            var favoritePhotoElRight = document.createElement('div');
+            favoritePhotoElRight.id = 'favoritePhotoOverlayRight';
+            favoritePhotoElRight.className = 'favorite-photo-overlay favorite-photo-overlay-right';
+            favoritePhotoElRight.innerHTML = '<img src="images/photo7.jpg" alt="">';
+            document.body.appendChild(favoritePhotoElRight);
             expandOverlay.classList.add('fade-out');
             requestAnimationFrame(function () {
               document.getElementById('successContent').classList.add('visible');
@@ -615,6 +819,22 @@
               current.classList.add('flipped');
               current.classList.remove('current');
               next.classList.add('current');
+              var favEl = document.getElementById('favoritePhotoOverlay');
+              var favElRight = document.getElementById('favoritePhotoOverlayRight');
+              if (reasonCards[idx + 1] === 'this picture' && favEl) {
+                favEl.classList.add('visible');
+                clearTimeout(window._favPhotoTimeoutLeft);
+                window._favPhotoTimeoutLeft = setTimeout(function () {
+                  favEl.classList.remove('visible');
+                }, 5000);
+              }
+              if (reasonCards[idx + 1] === 'this one too' && favElRight) {
+                favElRight.classList.add('visible');
+                clearTimeout(window._favPhotoTimeoutRight);
+                window._favPhotoTimeoutRight = setTimeout(function () {
+                  favElRight.classList.remove('visible');
+                }, 5000);
+              }
               if (!this.querySelector('.notecard[data-index="' + (idx + 2) + '"]')) {
                 this.classList.add('on-last-card');
               }
