@@ -778,7 +778,7 @@
             var today = new Date();
             var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
             var dateStr = months[today.getMonth()] + ' ' + today.getDate() + ', ' + today.getFullYear();
-            var mainHtml = '<div class="success-content" id="successContent"><div class="heart">♥</div><h1>You said yes!</h1><p class="sub">You picked the right answer. You\'re officially my girlfriend! </p><p class="sub">' + dateStr + ' will forever be our day.</p><p class="sub">You took ' + elapsedSeconds.toFixed(1) + ' seconds to answer, which could\'ve been a little faster...</p></div>';
+            var mainHtml = '<div class="success-content" id="successContent"><div class="heart">♥</div><h1>You said yes!</h1><p class="sub">You picked the right answer. You\'re officially my girlfriend! </p><p class="sub">' + dateStr + ' is our day.</p><p class="sub">You took ' + elapsedSeconds.toFixed(1) + ' seconds to answer, which could\'ve been a little faster...</p></div>';
             var cardsHtml = '';
             for (var r = 0; r < reasonCards.length; r++) {
               cardsHtml += '<div class="notecard' + (r === 0 ? ' current' : '') + '" data-index="' + r + '"><span class="notecard-reason">' + reasonCards[r] + '</span></div>';
